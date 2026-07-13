@@ -1,0 +1,31 @@
+name: Pipeline de Qualidade
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  qualidade:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov flake8
+          # Se você tiver um arquivo de requisitos, descomente a linha abaixo:
+          # pip install -r requirements.txt
+
+      - name: Rodar flake8 (Linter)
+        run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Rodar pytest com cobertura mínima de 60%
+        run: pytest --cov=biblioteca --cov-fail-under=60

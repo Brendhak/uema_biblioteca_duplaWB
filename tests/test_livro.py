@@ -25,7 +25,21 @@ def test_emprestar_livro_ja_emprestado_levanta_erro():
 
 
 # ── Complete os testes abaixo ─────────────────────────────────────────────
-# Voce deve escrever testes para:
-#   devolver() — livro emprestado (deve funcionar)
-#   devolver() — livro disponivel (deve levantar ValueError)
-#   __str__()  — verificar o formato da string retornada
+
+def test_devolver_livro_emprestado():
+    livro = Livro("O Cortico", "Azevedo", "978-85-001-0001-1")
+    livro.emprestar()
+    livro.devolver()
+    assert livro.disponivel is True
+
+
+def test_devolver_livro_ja_disponivel_levanta_erro():
+    livro = Livro("O Alquimista", "Paulo Coelho", "978-85-359-0000-0")
+    with pytest.raises(ValueError):
+        livro.devolver()
+
+
+def test_representacao_string_livro():
+    livro = Livro("Neuromancer", "William Gibson", "978-85-359-1111-1")
+    formato_esperado = "'Neuromancer' de William Gibson (ISBN:978-85-359-1111-1) [Disponivel]"
+    assert str(livro) == formato_esperado
